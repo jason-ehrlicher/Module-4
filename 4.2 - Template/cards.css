@@ -5,9 +5,11 @@ body {
 .card {
   padding: 10px;
   border: 1px solid black;
-  margin: 10px 0;
   border-radius: 5px;
+  width: 25%;
+  box-sizing: border-box;
 }
+
 .card-title {
   font-weight: 600;
   font-size: 3em;
@@ -16,4 +18,12 @@ body {
 .card-description {
   font-weight: 400;
   font-size: 2em;
+}
+
+#card-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
 }
