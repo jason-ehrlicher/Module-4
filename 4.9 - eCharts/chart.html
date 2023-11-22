@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,33 +12,45 @@
     <!-- Prepare a DOM with a defined width and height for ECharts -->
     <div id="main" style="width: 900px; height: 600px"></div>
     <script type="text/javascript">
-      // Specify the configuration items and data for the chart
-      let options = {
-        title: { text: "Fake Store Categories" },
-        xAxis: {
-          data: ["Category 1", "Category 2", "Category 3", "Category 4"],
-        },
-        yAxis: {},
-        series: [
-          {
-            name: "# products",
-            type: "bar",
-            data: [0, 1, 5, 2],
-          },
-        ],
-      };
+      // Initialize the echarts instance based on the prepared div
+      let myChart = echarts.init(document.getElementById('main'));
+
+      // Fetch data from the Fake Store API
       fetch("https://fakestoreapi.com/products")
         .then((response) => response.json())
-        .then((json) => {
-          console.log(json);
-          // use this JSON to find and set correct option data for the chart
-        })
-        .then(() => {
-          // Display the chart
+        .then((products) => {
+          // Process the data to count the number of products in each category
+          const categoryCounts = products.reduce((counts, product) => {
+            counts[product.category] = (counts[product.category] || 0) + 1;
+            return counts;
+          }, {});
+
+          // Prepare data for the chart
+          let categories = Object.keys(categoryCounts);
+          let data = Object.values(categoryCounts);
+
+          // Update the chart options with the fetched data
+          let options = {
+            title: { text: "Fake Store Categories" },
+            xAxis: {
+              type: 'category',
+              data: categories,
+            },
+            yAxis: {
+              type: 'value',
+            },
+            series: [
+              {
+                name: "# products",
+                type: "bar",
+                data: data,
+              },
+            ],
+          };
+
+          // Set the options for the chart
           myChart.setOption(options);
         });
-      // Initialize the echarts instance based on the prepared div
-      let myChart = echarts.init(document.getElementById("main"));
     </script>
   </body>
 </html>
