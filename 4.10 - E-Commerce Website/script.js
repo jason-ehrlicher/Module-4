@@ -2,11 +2,11 @@ let allProducts = []; // Global variable to store all products
 
 // Fetch data from the Fake Store API
 fetch("https://fakestoreapi.com/products")
-  .then((response) => response.json())
+  .then((response) => response.json()) // Convert the response to JSON
   .then((data) => {
-    allProducts = data;
-    populateProducts(allProducts);
-    populateCategories(data);
+    allProducts = data; // Store the data in the global variable
+    populateProducts(allProducts); // Populate the products on the page
+    populateCategories(data); // Populate category filter options
   })
   .catch((error) => {
     console.error("Error fetching products:", error);
@@ -16,13 +16,15 @@ fetch("https://fakestoreapi.com/products")
 // Event listeners for category change and search input
 document
   .getElementById("categorySelect")
-  .addEventListener("change", handleCategoryChange);
-document.getElementById("searchBar").addEventListener("keyup", handleSearch);
+  .addEventListener("change", handleCategoryChange); // Event listener for category filter change
+document.getElementById("searchBar").addEventListener("keyup", handleSearch); // Event listener for search input
 
+// Function to populate products on the page
 function populateProducts(products) {
-  const grid = document.getElementById("productsGrid");
+  const grid = document.getElementById("productsGrid"); // Get the product grid element
   let cardsHtml = "";
 
+  // Iterate over each product and create HTML cards
   products.forEach((product) => {
     cardsHtml += `
       <div class="col-md-3 mb-4">
@@ -45,17 +47,19 @@ function populateProducts(products) {
     `;
   });
 
-  grid.innerHTML = cardsHtml;
+  grid.innerHTML = cardsHtml; // Set the grid's HTML to the cards
 }
-
+// Function to populate category filter options
 function populateCategories(products) {
   const categorySelect = document.getElementById("categorySelect");
-  const categories = new Set();
+  const categories = new Set(); // Use a Set to store unique categories
 
+  // Add each product's category to the Set
   products.forEach((product) => {
     categories.add(product.category);
   });
 
+   // Create and append option elements for each category
   categories.forEach((category) => {
     const option = document.createElement("option");
     option.value = category;
@@ -64,15 +68,17 @@ function populateCategories(products) {
   });
 }
 
+// Function to handle category filter change
 function handleCategoryChange() {
   const selectedCategory = document.getElementById("categorySelect").value;
   const filteredProducts =
     selectedCategory === "all"
       ? allProducts
       : allProducts.filter((product) => product.category === selectedCategory);
-  populateProducts(filteredProducts);
+  populateProducts(filteredProducts);  // Repopulate products based on selected category
 }
 
+// Function to handle search input
 function handleSearch() {
   const searchText = document.getElementById("searchBar").value.toLowerCase();
   const filteredProducts = allProducts.filter(
@@ -80,14 +86,16 @@ function handleSearch() {
       product.title.toLowerCase().includes(searchText) ||
       product.description.toLowerCase().includes(searchText)
   );
-  populateProducts(filteredProducts);
+  populateProducts(filteredProducts);   // Repopulate products based on search text
 }
 
+// Function to display error messages
 function displayErrorMessage(message) {
   const container = document.getElementById("productsGrid");
-  container.innerHTML = `<p class="error-message">${message}</p>`;
+  container.innerHTML = `<p class="error-message">${message}</p>`; // Set the error message in the product grid container
 }
 
+// Function to get icons for different categories
 function getIconForCategory(category) {
   switch (category) {
     case "electronics":
@@ -102,3 +110,4 @@ function getIconForCategory(category) {
       return "🛍️"; // Default icon for other categories
   }
 }
+  
