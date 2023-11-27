@@ -110,3 +110,4 @@ function getIconForCategory(category) {
       return "🛍️"; // Default icon for other categories
   }
 }
+  
